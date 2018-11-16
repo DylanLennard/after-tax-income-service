@@ -14,17 +14,17 @@ class Tax():
         self.rates = rates
         self.bracket = bracket
         self.amount = 0
-        
+
     def calculate(self):
         """
         Calculates the after tax income of a given form of taxes
-        
+
         Args:
-            income: float or int of the pre-tax income  
-        Returns: 
+            income: float or int of the pre-tax income
+        Returns:
             amount: the amount one has to pay for tax
         """
-        # TODO: consider redoing this 
+        # TODO: consider redoing this
         for i, val in enumerate(self.bracket):
             if i == 0: # may change this later if 0 not included in array
                 continue
@@ -38,7 +38,7 @@ class Tax():
 
         return round(self.amount, 2)
 
-        
+
 def state_tax(income):
     '''
     Go http://www.tax-brackets.org/ and store data in json
@@ -49,7 +49,7 @@ def state_tax(income):
     brackets = [0, 7582, 17_976, 28_371, 39_384, 49774, 254_250,
                     305_100, 508_500, 1_000_000]
     state = 'CA'#Can just add attributes to class as you go as well.
-    
+
     state = Tax(rates, brackets, income)
 
     return state.calculate()
@@ -59,7 +59,7 @@ def federal_tax(income):
     '''http://taxfoundation.org/article/2016-tax-brackets and store in array or in dataframe'''
     rates = [0.1, 0.15, 0.25, 0.28, 0.33, 0.35, 0.396]
     brackets = [0, 9_275, 37_650, 91_150, 190_150, 413_350, 415_050]
-    
+
     fed = Tax(rates, brackets, income)
 
     return fed.calculate()
@@ -93,8 +93,9 @@ def other_tax(income, status=True):
     total_other_tax = ssi_tax + medicare_tax
     return total_other_tax
 
-    
+
 def tax(income, status=True):
+    if status is None: status= True
     federal_amount = federal_tax(income)
     state_amount = state_tax(income)
     other_amount = other_tax(income, status)
@@ -102,4 +103,3 @@ def tax(income, status=True):
     after_tax = income - federal_amount - state_amount - other_amount
 
     return after_tax
-

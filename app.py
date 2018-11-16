@@ -12,13 +12,9 @@ def hello_world():
 @app.route('/after_tax_income')
 def after_tax_income():
     income = float(request.args.get('income'))
-    #status = request.args.get('status')
-    after_tax = str(tax_app.tax(income))
+    status = request.args.get('status')
+    after_tax = str(tax_app.tax(income, status))
     return after_tax
 
 if __name__ == "__main__":
-    app.run(
-    #host="0.0.0.0",
-    # port=80
-    port=5000
-    )
+    app.run(host="0.0.0.0",port=80)
