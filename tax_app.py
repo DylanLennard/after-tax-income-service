@@ -7,7 +7,9 @@ import sys
 
 class Tax():
     """
-    TODO: maybe have this have child classes and stuff that way
+    TODO: rethink how we structure this since creating an actual service 
+          rather than simple command line app. Maybe abstract class, inherit
+          from that class for State and Federal and Other.
     """
     def __init__(self, rates, bracket, income):
         self.income = income
