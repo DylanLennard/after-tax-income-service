@@ -1,24 +1,11 @@
 pipeline {
     agent any 
-
     stages {
-        stage('Build Assets') {
+        stage('Test') {
             agent any 
             steps {
-                echo 'Checking that this worked...'
+                echo 'Jenkins, are you there?...'
             }
-        }
-        stage('Test') {
-            agent any
-            steps {
-                echo 'Testing stuff...'
-            }
-        }
-        stage('Deploy') {
-          agent any
-          steps{
-                echo 'Deploying stuff...'
-          }
         }
     }
 }
