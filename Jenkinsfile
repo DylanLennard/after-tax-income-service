@@ -5,7 +5,7 @@ pipeline {
         stage('Build Assets') {
             agent any 
             steps {
-                echo 'Building Assets'
+                echo 'Checking that this worked...'
             }
         }
         stage('Test') {
