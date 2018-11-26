@@ -48,8 +48,8 @@ def state_tax(income):
     '''
     rates = [0.01, 0.02, 0.04, 0.06, 0.08, 0.093,
                     0.103, 0.113, 0.123, 0.133]
-    brackets = [0, 7582, 17_976, 28_371, 39_384, 49774, 254_250,
-                    305_100, 508_500, 1_000_000]
+    brackets = [0, 8_015, 19_001, 29_989, 41_629, 52_612, 268_750,
+                    322_499, 537_498, 1_000_000]
     state = 'CA' #Can just add attributes to class as you go as well.
 
     state = Tax(rates, brackets, income)
@@ -59,8 +59,8 @@ def state_tax(income):
 
 def federal_tax(income):
     '''http://taxfoundation.org/article/2016-tax-brackets and store in array or in dataframe'''
-    rates = [0.1, 0.15, 0.25, 0.28, 0.33, 0.35, 0.396]
-    brackets = [0, 9_275, 37_650, 91_150, 190_150, 413_350, 415_050]
+    rates = [0.1, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37]
+    brackets = [0, 9_526, 38_701, 82_501, 157_501, 200_001, 500_001]
 
     fed = Tax(rates, brackets, income)
 
