@@ -24,8 +24,11 @@ pipeline {
                 docker { image 'python:3.6-slim' }
             }
             steps {
+                sh 'python -m virtualenv testenv'
+                sh 'source activate testenv'
                 sh 'sudo pip install -r requirements.txt'
                 sh 'sudo python -m unittest test.py'
+                sh 'deactivate'
                 echo 'figure out how to report if the tests passed or not'
             }
         }
