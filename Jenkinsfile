@@ -1,14 +1,14 @@
 pipeline {
   environment {
       registry = 'testrepo'
-      dockerImage = ‘’
+      dockerImage = ''
     }
-    agent none 
+    agent any 
     stages {
-        stage(‘Cloning Git’) {
+        stage('Cloning Git') {
             agent any 
             steps {
-                git https://github.com/DylanLennard/after-tax-income-service.git
+                git 'https://github.com/DylanLennard/after-tax-income-service.git'
             }
         }
         stage('Build Image') {
@@ -22,7 +22,7 @@ pipeline {
         stage('Unit Tests') {
             agent docker { image python:3.6-slim }
             steps {
-                sh 'pip3 install -r requirements.txt'
+                sh 'pip install -r requirements.txt'
                 sh 'python -m unittest test.py'
                 # figure out how to signify that these tests passed or nah
             }
