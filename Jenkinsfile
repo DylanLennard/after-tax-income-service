@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sh 'pip install -r requirements.txt'
                 sh 'python -m unittest test.py'
-                # figure out how to signify that these tests passed or nah
+                echo 'figure out how to report if the tests passed or not'
             }
         }
         stage('Deploy') {
