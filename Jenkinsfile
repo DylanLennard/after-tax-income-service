@@ -24,8 +24,8 @@ pipeline {
                 docker { image 'python:3.6-slim' }
             }
             steps {
-                sh 'pip install -r requirements.txt'
-                sh 'python -m unittest test.py'
+                sh 'sudo pip install -r requirements.txt'
+                sh 'sudo python -m unittest test.py'
                 echo 'figure out how to report if the tests passed or not'
             }
         }
