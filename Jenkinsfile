@@ -1,17 +1,26 @@
 pipeline {
-    agent any 
+  environment {
+      registry = 'testrepo'
+      dockerImage = ‘’
+    }
+    agent none 
     stages {
+        stage(‘Cloning Git’) {
+            agent any 
+            steps {
+                git https://github.com/DylanLennard/after-tax-income-service.git
+            }
+        }
         stage('Build Image') {
             agent any 
             steps {
-                sh 'git clone https://github.com/DylanLennard/after-tax-income-service.git'
-                sh 'cd after-tax-income-service/'
-                sh 'docker build -t testrepo .'
-                sh 'docker tag testrepo testrepo:testtag'
+              script{
+                  dockerImage = docker.build registry + ':testtag'
+              }
             }
         }
         stage('Unit Tests') {
-            agent docker {image python3.6-slim}
+            agent docker { image python:3.6-slim }
             steps {
                 sh 'pip3 install -r requirements.txt'
                 sh 'python -m unittest test.py'
