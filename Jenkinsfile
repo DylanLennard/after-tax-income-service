@@ -24,12 +24,12 @@ pipeline {
                 docker { image 'python:3.6-slim' }
             }
             steps {
-                sh '''python3 -m venv env
-                      source ./env/bin/activate
-                      pip install --user -r requirements.txt
-                      python -m unittest test.py
-                   '''
-                echo 'figure out how to report if the tests passed or not'
+              withEnv(["HOME=${env.WORKSPACE}"]){
+                  sh '''pip install --user -r requirements.txt
+                        python -m unittest test.py
+                     '''
+                  echo 'figure out how to report if the tests passed or not'
+              }
             }
         }
         stage('Deploy') {
