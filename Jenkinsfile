@@ -5,12 +5,6 @@ pipeline {
     }
     agent any 
     stages {
-        stage('Cloning Git') {
-            agent any 
-            steps {
-                git 'https://github.com/DylanLennard/after-tax-income-service.git'
-            }
-        }
         stage('Build Image') {
             agent any 
             steps {
