@@ -1,5 +1,6 @@
 import unittest
 import tax_app
+import xmlrunner
 
 class TestRawMethods(unittest.TestCase):
 
@@ -37,4 +38,4 @@ class TestRawMethods(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(output='test-reports'))
