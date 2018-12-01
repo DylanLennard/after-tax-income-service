@@ -29,8 +29,7 @@ pipeline {
         stage('Deploy') {
             agent any
             steps{
-                  sh '''DOCKER_LOGIN=`aws ecr get-login --region us-west-2`
-                        ${DOCKER_LOGIN}
+                  sh '''$(aws ecr get-login --no-include-email --region us-west-2)
                         docker build -t testrepo .
                         docker tag testrepo:latest 838373517759.dkr.ecr.us-west-2.amazonaws.com/testrepo:testtag
                         docker push 838373517759.dkr.ecr.us-west-2.amazonaws.com/testrepo:testtag
