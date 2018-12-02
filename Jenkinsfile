@@ -21,7 +21,7 @@ pipeline {
             agent {
                 docker { image 'python:3.6-slim' }
             }
-            environment { "HOME=${env.WORKSPACE}" }
+            environment { HOME=${WORKSPACE}}
             steps {
                 sh '''pip install --user -r requirements.txt
                       python -m pytest test.py --verbose --junit-xml test-reports/results.xml
