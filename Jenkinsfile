@@ -30,7 +30,11 @@ pipeline {
             }
             post {
                 always {
-                    junit allowEmptyResults: true, testResults: 'test-reports/results.xml'
+                    // junit allowEmptyResults: true, testResults: 'test-reports/results.xml'
+                    step([$class: 'XUnitBuilder',
+                         thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+                         tools: [[$class: 'JUnitType', pattern: 'test-reports/**']]]
+                    )
                 }
             }
         }
