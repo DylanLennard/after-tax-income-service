@@ -24,7 +24,7 @@ pipeline {
             steps {
                 withEnv(["HOME=${env.WORKSPACE}"]){
                     sh '''pip install --user -r requirements.txt
-                          python -m pytest --verbose --junit-xml test-reports/results.xml
+                          python -m pytest test.py --verbose --junit-xml test-reports/results.xml
                        '''
                     echo 'figure out how to report if the tests passed or not'
                 }
