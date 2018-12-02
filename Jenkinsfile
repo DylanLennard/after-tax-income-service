@@ -9,8 +9,9 @@ pipeline {
             agent any
             steps {
               script{
-                  dockerImage = docker.build registry + ':testtag'
-                  echo $dockerImage
+                  sh '''docker build -t testrepo .
+                        docker tag testrepo:latest 838373517759.dkr.ecr.us-west-2.amazonaws.com/testrepo:testtag
+                     '''
               }
             }
         }
@@ -31,8 +32,6 @@ pipeline {
             agent any
             steps{
                   sh '''$(aws ecr get-login --no-include-email --region us-west-2)
-                        # docker build -t testrepo .
-                        # docker tag testrepo:latest 838373517759.dkr.ecr.us-west-2.amazonaws.com/testrepo:testtag
                         docker push 838373517759.dkr.ecr.us-west-2.amazonaws.com/testrepo:testtag
                      '''
                   echo 'Deploy was successful'
