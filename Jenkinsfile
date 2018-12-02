@@ -27,12 +27,8 @@ pipeline {
                           python -m pytest test.py --verbose --junit-xml test-reports/results.xml
                        '''
                     echo 'figure out how to report if the tests passed or not'
-                }
-                post {
-                    always {
-                        // Archive unit tests for the future
-                        junit allowEmptyResults: true, testResults: 'test-reports/results.xml'
-                    }
+                    junit allowEmptyResults: true, testResults: 'test-reports/results.xml'
+                    echo 'used junit command so if it fails it will fail here'
                 }
             }
         }
