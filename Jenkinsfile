@@ -39,6 +39,8 @@ pipeline {
             steps{
                   sh '''$(aws ecr get-login --no-include-email --region us-west-2)
                         docker push 838373517759.dkr.ecr.us-west-2.amazonaws.com/testrepo:testtag
+                        echo 'Forcing the deployment of the service'
+                        aws ecs update-service --force-new-deployment --service testService
                      '''
                   echo 'Deploy was successful'
             }
