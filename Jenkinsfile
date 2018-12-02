@@ -21,16 +21,18 @@ pipeline {
             agent {
                 docker { image 'python:3.6-slim' }
             }
-            environment { HOME=${env.WORKSPACE} }
+            environment { "HOME=${env.WORKSPACE}" }
             steps {
                 sh '''pip install --user -r requirements.txt
                       python -m pytest test.py --verbose --junit-xml test-reports/results.xml
                    '''
             }
             post {
-                echo 'j Unit is about to run'
-                junit allowEmptyResults: true, testResults: 'test-reports/results.xml'
-                echo 'j unit ran'
+                always {
+                  echo 'j Unit is about to run'
+                  junit allowEmptyResults: true, testResults: 'test-reports/results.xml'
+                  echo 'j unit ran'
+                }
             }
         }
         stage('Deploy') {
