@@ -1,7 +1,9 @@
 pipeline {
   environment {
-      registry = '38373517759.dkr.ecr.us-west-2.amazonaws.com/testrepo'
-      dockerImage = ''
+      // use these in the future instead of hardcoding like below
+      registry = '38373517759.dkr.ecr.us-west-2.amazonaws.com/'
+      dockerImage = 'testrepo'
+      dockerTag = 'testtag'
     }
     agent any
     stages {
@@ -20,12 +22,18 @@ pipeline {
                 docker { image 'python:3.6-slim' }
             }
             steps {
-              withEnv(["HOME=${env.WORKSPACE}"]){
-                  sh '''pip install --user -r requirements.txt
-                        python -m unittest test.py
-                     '''
-                  echo 'figure out how to report if the tests passed or not'
-              }
+                withEnv(["HOME=${env.WORKSPACE}"]){
+                    sh '''pip install --user -r requirements.txt
+                          python -m pytest --verbose --junit-xml test-reports/results.xml
+                       '''
+                    echo 'figure out how to report if the tests passed or not'
+                }
+                post {
+                    always {
+                        // Archive unit tests for the future
+                        junit allowEmptyResults: true, testResults: 'test-reports/results.xml', fingerprint: true
+                    }
+                }
             }
         }
         stage('Deploy') {
