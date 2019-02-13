@@ -49,7 +49,7 @@ class Tax():
         return round(self.amount, 2)
 
 
-def get_tax_info(income: float, state: str = 'CA') -> (Tax, Tax):
+def get_tax_info(state: str = 'CA') -> (Tax, Tax):
     """
     Constructs and returns the appropriate object of type Tax given inputs
 
@@ -75,16 +75,20 @@ def get_tax_info(income: float, state: str = 'CA') -> (Tax, Tax):
     return fed_tax_obj, state_tax_obj
 
 
-def other_tax(income: float, status: bool = True) -> float:
+def other_tax(income: float, status: bool = False) -> float:
     '''
     Measures social security and medical based on employment.
+
+    Args:
+        income: the pretax income one earns
+        status: whether or not user is self employed
+    Returns
+        total_other_tax: total amount paid to other taxes
     '''
     medicare_rate = 0.0145
     medicare_upper_rate = 0.0235  # for those making over $200000
     ssi_rate = 0.062  # up to $118,500
 
-    # edit this and possibly the variable construction
-    # also edit this to just look for y or n in stirng
     if status:
         medicare_rate = medicare_rate * 2
         medicare_upper_rate = medicare_upper_rate * 2
@@ -102,4 +106,5 @@ def other_tax(income: float, status: bool = True) -> float:
             medicare_tax = income * medicare_upper_rate
 
     total_other_tax = ssi_tax + medicare_tax
-    return round(total_other_tax, 2)
+    total_other_tax = round(total_other_tax, 2)
+    return total_other_tax
