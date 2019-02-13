@@ -1,20 +1,42 @@
 from flask import Flask
 from flask import request
-import tax_app
+from tax_app import get_tax_info, other_tax
+import json
+
 app = Flask(__name__)
 
-# TODO: use json to return an object with all info
 
 @app.route('/')
 def hello_world():
     return 'Aye!'
 
+
 @app.route('/after_tax_income')
-def after_tax_income():
+def after_tax_income_handler():
+    # get params and handle appropriately
     income = float(request.args.get('income'))
-    status = request.args.get('status')
-    after_tax = str(tax_app.tax(income, status))
-    return after_tax
+    status = request.args.get('selfemploymentstatus')
+    status = bool(status) if status.lower() == 'true' else False
+
+    # calculate taxes based on income, state, and emp status
+    fed_tax, state_tax = get_tax_info(state="CA")
+    federal_amount = fed_tax.calculate(income)
+    state_amount = state_tax.calculate(income)
+    other_amount = other_tax(income, status)
+
+    # calculate after tax income
+    after_tax = income - federal_amount - state_amount - other_amount
+    after_tax = round(after_tax, 2)
+
+    # construct and return response
+    reponse = dict(
+        AfterTaxIncome=after_tax,
+        FederalTaxesPaid=federal_amount,
+        StateTaxesPaid=state_amount,
+        OtherTaxesPaid=other_amount
+    )
+    return json.dumps(reponse)
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=80)
+    app.run(host="0.0.0.0", port=8080)
