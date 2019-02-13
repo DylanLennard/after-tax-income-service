@@ -5,6 +5,7 @@ import json
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def hello_world():
     return 'Aye!'
@@ -17,14 +18,17 @@ def after_tax_income_handler():
     status = request.args.get('selfemploymentstatus')
     status = bool(status) if status.lower() == 'true' else False
 
+    # calculate taxes based on income, state, and emp status
     fed_tax, state_tax = get_tax_info(state="CA")
     federal_amount = fed_tax.calculate(income)
     state_amount = state_tax.calculate(income)
     other_amount = other_tax(income, status)
 
+    # calculate after tax income
     after_tax = income - federal_amount - state_amount - other_amount
     after_tax = round(after_tax, 2)
 
+    # construct and return response
     reponse = dict(
         AfterTaxIncome=after_tax,
         FederalTaxesPaid=federal_amount,
