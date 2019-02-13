@@ -24,4 +24,3 @@ Returns your after tax income assuming no write offs based on your income bracke
 * Load Scraper Results to DB  
 * Make DB requests in backend to get proper values for tax rates  
 * Up security a little to make it all good
-* Set up CI/CD with Jenkins  
