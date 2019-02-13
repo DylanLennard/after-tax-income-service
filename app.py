@@ -5,7 +5,6 @@ import json
 
 app = Flask(__name__)
 
-# TODO: use json to return an object with all info
 @app.route('/')
 def hello_world():
     return 'Aye!'
