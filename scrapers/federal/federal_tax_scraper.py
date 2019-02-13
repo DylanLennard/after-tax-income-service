@@ -1,9 +1,5 @@
 from seleniumrequests import Chrome
-
 from selenium.webdriver import ChromeOptions
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from fake_useragent import UserAgent
 import csv
@@ -13,6 +9,7 @@ YEAR = '2019'
 FED_TAX_URL = f'https://taxfoundation.org/{YEAR}-tax-brackets/'
 TABLE_CAPTION_TEXT = f"Table 1. Tax Brackets and Rates, {YEAR}"
 FILENAME = f'federal_tax_rates_{YEAR}.csv'
+
 
 class FedScrape(object):
     """
@@ -24,7 +21,6 @@ class FedScrape(object):
         self.filename = filename
         self._rate_dict = dict()
         self.header_fields = []
-
 
     def setup_driver(self, headless=True):
         """Establish chrome options for and instantiate driver"""
@@ -40,13 +36,11 @@ class FedScrape(object):
 
         return driver
 
-
     def get_data_from_row(self, row):
         """Get data from a given row"""
         for field in self.header_fields:
             field_elem = row.find_element_by_xpath(f'./td[@data-title="{field}"]')
             self._rate_dict[field] = field_elem.text
-
 
     def get_data_from_table(self, table):
         """Get data from the table element to write to csv"""
@@ -64,7 +58,6 @@ class FedScrape(object):
             self._write_data()
             count += 1
 
-
     def _write_data(self):
         """Write individual line to CSV"""
         dir = self.data_dir
@@ -76,18 +69,17 @@ class FedScrape(object):
         # write the header if it's a new file
         if not os.path.isfile(outfile):
             print(f"Creating {outfile} and writing the header")
-            with open(outfile,'w') as fou:
+            with open(outfile, 'w') as fou:
                 dw = csv.DictWriter(fou, delimiter=',',
                                     fieldnames=self.header_fields)
                 dw.writeheader()
 
         # write the output of the dictionary to the file
-        with open(outfile,'a') as fou:
+        with open(outfile, 'a') as fou:
             dw = csv.DictWriter(fou, delimiter=',',
                                 fieldnames=self.header_fields)
             dw.writerow(self._rate_dict)
             self._rate_dict.clear()
-
 
     def run(self):
         """Workhorse function"""
@@ -99,8 +91,10 @@ class FedScrape(object):
 
         print("Find the correct table")
         tables = self.driver.find_elements_by_xpath('//table')
-        table = [table for table in tables
-                if table.find_element_by_xpath('./caption').text == TABLE_CAPTION_TEXT][0]
+        table = [
+            table for table in tables
+            if table.find_element_by_xpath('./caption').text==TABLE_CAPTION_TEXT
+        ][0]
 
         print("Get the data from the table")
         self.get_data_from_table(table)
