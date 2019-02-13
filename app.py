@@ -17,7 +17,7 @@ def after_tax_income_handler():
     status = request.args.get('selfemploymentstatus')
     status = bool(status) if status.lower() == 'true' else False
 
-    fed_tax, state_tax = get_tax_info(income=income, state="CA")
+    fed_tax, state_tax = get_tax_info(state="CA")
     federal_amount = fed_tax.calculate(income)
     state_amount = state_tax.calculate(income)
     other_amount = other_tax(income, status)
