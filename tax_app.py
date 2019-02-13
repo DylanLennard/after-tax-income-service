@@ -102,18 +102,5 @@ def other_tax(income: float, status: bool = True) -> float:
             medicare_tax = income * medicare_upper_rate
 
     total_other_tax = ssi_tax + medicare_tax
-    return total_other_tax
+    return round(total_other_tax, 2)
 
-
-def tax(income: float, status: bool = True) -> float:
-    """Calculate the actual tax"""
-    if status is None: status = True
-
-    fed_tax, state_tax = get_tax_info(income=income, state="CA")
-    federal_amount = fed_tax.calculate(income)
-    state_amount = state_tax.calculate(income)
-    other_amount = other_tax(income, status)
-
-    after_tax = income - federal_amount - state_amount - other_amount
-
-    return after_tax
