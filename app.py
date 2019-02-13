@@ -14,8 +14,8 @@ def hello_world():
 def after_tax_income_handler():
     # get params and handle appropriately
     income = float(request.args.get('income'))
-    status = request.args.get('status')
-    if status is None: status = True
+    status = request.args.get('selfemploymentstatus')
+    status = bool(status) if status.lower() == 'true' else False
 
     fed_tax, state_tax = get_tax_info(income=income, state="CA")
     federal_amount = fed_tax.calculate(income)

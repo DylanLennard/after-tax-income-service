@@ -85,7 +85,7 @@ def other_tax(income: float, status: bool = True) -> float:
 
     # edit this and possibly the variable construction
     # also edit this to just look for y or n in stirng
-    if not status:
+    if status:
         medicare_rate = medicare_rate * 2
         medicare_upper_rate = medicare_upper_rate * 2
         ssi_rate = ssi_rate * 2
@@ -103,4 +103,3 @@ def other_tax(income: float, status: bool = True) -> float:
 
     total_other_tax = ssi_tax + medicare_tax
     return round(total_other_tax, 2)
-
