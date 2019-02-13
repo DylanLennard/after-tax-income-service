@@ -15,12 +15,8 @@ Returns your after tax income assuming no write offs based on your income bracke
 
 ## TODO List  
 * Provide the status as a parameter  
-* Modify output object to give more information  
-    * Make it into a JSON object rather than a simple string  
 * Set up with a domain name  
 * Create Scraper to Update the income brackets and tax rates  
   * For state (CA) and for federal and for SSI/medicare  
   * Expand to get rates for other states too  
-* Load Scraper Results to DB  
-* Make DB requests in backend to get proper values for tax rates  
-* Up security a little to make it all good
+  * store data in JSON  
