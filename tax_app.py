@@ -3,16 +3,30 @@
 Takes input from user to calculate income tax before deductions.
 '''
 
+import json
+
+TAX_DATA_FOLDER = "data/"
+FEDERAL_TAX_FILE = TAX_DATA_FOLDER + 'federal_taxes.json'
+STATE_TAX_FILE = TAX_DATA_FOLDER + 'state_taxes.json'
+
 
 class Tax():
+    """
+    A Class to hold rate and bracket data for federal or state taxes
+    This class will also be able to calculate the amount paid in taxes given 
+    income as an input
 
-    def __init__(self, rates: list, bracket: list, income: float):
-        self.income = income
+    Args:
+        * rates: the marginal tax rates themselves
+        * brackets: the income brackets related to each rate (start at 0)
+    """
+
+    def __init__(self, rates: list, brackets: list):
         self.rates = rates
-        self.bracket = bracket
+        self.brackets = brackets
         self.amount = 0
 
-    def calculate(self) -> float:
+    def calculate(self, income: float) -> float:
         """
         Calculates the after tax income of a given form of taxes
 
@@ -21,49 +35,44 @@ class Tax():
         Returns:
             amount: the amount one has to pay for tax
         """
-        # TODO: consider redoing this
-        for i, val in enumerate(self.bracket):
+        for i, val in enumerate(self.brackets):
             if i == 0:  # may change this later if 0 not included in array
                 continue
-            if i == (len(self.bracket) - 1) and self.income > val:
-                self.amount = self.amount + (self.income-val) * self.rates[i]
-            elif self.income >= val:
-                self.amount = self.amount + (val - self.bracket[i-1]) * self.rates[i-1]
+            if i == (len(self.brackets) - 1) and income > val:
+                self.amount = self.amount + (income-val) * self.rates[i]
+            elif income >= val:
+                self.amount = self.amount + (val - self.brackets[i-1]) * self.rates[i-1]
             else:
-                self.amount = self.amount + (self.income - self.bracket[i-1]) * self.rates[i-1]
+                self.amount = self.amount + (income - self.brackets[i-1]) * self.rates[i-1]
                 break
 
         return round(self.amount, 2)
 
 
-def state_tax(income: float) -> float:
-    '''
-    Go http://www.tax-brackets.org/ and store data in json
-    State should be key to a 2-d array. Or query as needed
-    and just store in array, probably the latter is best
-    '''
-    rates = [0.01, 0.02, 0.04, 0.06, 0.08, 0.093,
-             0.103, 0.113, 0.123, 0.133]
-    brackets = [0, 8_015, 19_001, 29_989, 41_629, 52_612, 268_750,
-                322_499, 537_498, 1_000_000]
-    state = 'CA'  # Can just add attributes to class as you go as well.
+def get_tax_info(income: float, state: str = 'CA') -> (Tax, Tax):
+    """
+    Constructs and returns the appropriate object of type Tax given inputs
 
-    state = Tax(rates, brackets, income)
+    Arguments:
+        income: the pretax income of an individual
+        state: string of the state abbreviation
+    """
 
-    return state.calculate()
+    with open(FEDERAL_TAX_FILE, 'r') as f_fed, open(STATE_TAX_FILE, 'r') as f_state:
+        fed_data = json.loads(f_fed.read())
+        state_data = json.loads(f_state.read())
 
+    fed_tax_obj = Tax(
+        rates=fed_data['rates'],
+        brackets=fed_data['brackets']
+    )
 
-def federal_tax(income: float) -> float:
-    '''
-    http://taxfoundation.org/article/2016-tax-brackets
-    and store in array or in dataframe
-    '''
-    rates = [0.1, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37]
-    brackets = [0, 9_526, 38_701, 82_501, 157_501, 200_001, 500_001]
+    state_tax_obj = Tax(
+        rates=state_data[state]['rates'],
+        brackets=state_data[state]['brackets']
+    )
 
-    fed = Tax(rates, brackets, income)
-
-    return fed.calculate()
+    return fed_tax_obj, state_tax_obj
 
 
 def other_tax(income: float, status: bool = True) -> float:
@@ -99,8 +108,10 @@ def other_tax(income: float, status: bool = True) -> float:
 def tax(income: float, status: bool = True) -> float:
     """Calculate the actual tax"""
     if status is None: status = True
-    federal_amount = federal_tax(income)
-    state_amount = state_tax(income)
+
+    fed_tax, state_tax = get_tax_info(income=income, state="CA")
+    federal_amount = fed_tax.calculate(income)
+    state_amount = state_tax.calculate(income)
     other_amount = other_tax(income, status)
 
     after_tax = income - federal_amount - state_amount - other_amount
