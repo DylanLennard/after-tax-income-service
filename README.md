@@ -13,9 +13,5 @@ Returns your after tax income assuming no write offs based on your income bracke
 * Load it to ECS  
 * Deploy it via ECS on a cluster  
 
-## TODO List  
-* Set up with a domain name  
-* Create Scraper to Update the income brackets and tax rates  
-  * For state (CA) and for federal and for SSI/medicare  
-  * Expand to get rates for other states too  
-  * store data in JSON  
+## TODO List
+* Have Scrapers store the data in JSON
