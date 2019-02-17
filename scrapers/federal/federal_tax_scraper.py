@@ -32,7 +32,7 @@ class FedScrape(object):
         chrome_options.add_argument(f'--user-agent={ua}')
         if headless: chrome_options.add_argument('headless')
 
-        driver = Chrome(chrome_options=chrome_options)
+        driver = Chrome(options=chrome_options)
 
         return driver
 
@@ -100,6 +100,7 @@ class FedScrape(object):
         self.get_data_from_table(table)
 
         print("Scrape Complete")
+        self.driver.close()
 
 
 if __name__ == '__main__':
