@@ -7,7 +7,6 @@ import os
 import re
 import time
 import random
-import pdb
 
 
 class StateScrape(object):
@@ -124,8 +123,8 @@ class StateScrape(object):
 
             # set state and filename
             print(f"Looking through {key}")
-            self.state = key.lower()
-            self.filename = f'state_tax_rates_{self.state}_{self.year}.csv'
+            self.state = key.lower().strip().replace(' ', '_')
+            self.filename = f'state_tax_rates_{self.state}_{self.year}.json'
 
             print(f"Go to URL {val}")
             self.driver.get(val)
