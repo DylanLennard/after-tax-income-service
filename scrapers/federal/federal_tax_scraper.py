@@ -4,6 +4,7 @@ from selenium.webdriver import ChromeOptions
 from fake_useragent import UserAgent
 import csv
 import os
+import re
 
 YEAR = '2019'
 FED_TAX_URL = f'https://taxfoundation.org/{YEAR}-tax-brackets/'
@@ -39,8 +40,10 @@ class FedScrape(object):
     def get_data_from_row(self, row):
         """Get data from a given row"""
         for field in self.header_fields:
-            field_elem = row.find_element_by_xpath(f'./td[@data-title="{field}"]')
-            self._rate_dict[field] = field_elem.text
+            field_elem = row.find_element_by_xpath(
+                f'./td[@data-title="{field}"]'
+            )
+            self._rate_dict[field] = re.sub('[\$|\%|,]', '', field_elem.text)
 
     def get_data_from_table(self, table):
         """Get data from the table element to write to csv"""
@@ -92,8 +95,8 @@ class FedScrape(object):
         print("Find the correct table")
         tables = self.driver.find_elements_by_xpath('//table')
         table = [
-            table for table in tables
-            if table.find_element_by_xpath('./caption').text==TABLE_CAPTION_TEXT
+            table for table in tables if
+            table.find_element_by_xpath('./caption').text==TABLE_CAPTION_TEXT
         ][0]
 
         print("Get the data from the table")
